@@ -2,6 +2,8 @@ package ecommerce.controllers;
 
 import ecommerce.dtos.requests.PostProductRequest;
 import ecommerce.entities.Product;
+import ecommerce.entities.ProductCategory;
+import ecommerce.entities.User;
 import ecommerce.exceptions.NotFoundException;
 import ecommerce.services.ProductServiceImpl;
 import lombok.AllArgsConstructor;
@@ -12,12 +14,12 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/v1/products")
+@RequestMapping("/api/v1/products")
 public class ProductController {
     private final ProductServiceImpl productService;
 
     @PostMapping
-    public ResponseEntity createProduct(@RequestBody PostProductRequest request){
+    public ResponseEntity createProduct(@RequestBody PostProductRequest request) throws NotFoundException {
         productService.createProduct(request);
         return ResponseEntity.ok(request);
     }

@@ -3,6 +3,8 @@ import ecommerce.dtos.requests.PostProductRequest;
 import ecommerce.dtos.requests.PutProductRequest;
 import ecommerce.dtos.responses.ProductResponse;
 import ecommerce.entities.Product;
+import ecommerce.entities.ProductCategory;
+import ecommerce.entities.User;
 import ecommerce.services.ProductService;
 import ecommerce.services.ProductServiceImpl;
 import org.mapstruct.Mapper;
@@ -17,7 +19,7 @@ public interface ProductMapper {
     @Mapping(target = "productId", ignore = true)
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "updatedAt", expression = "java(java.time.LocalDateTime.now())")
-    public Product postProductRequestToProduct(PostProductRequest request);
+    public Product postProductRequestToProduct(PostProductRequest request, ProductCategory productCategory, User productOwner);
 
     @Mapping(target = "updatedAt", expression = "java(java.time.LocalDateTime.now())")
     public Product updateProductRequestToProduct(PutProductRequest request);

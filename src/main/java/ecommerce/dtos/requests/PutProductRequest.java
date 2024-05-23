@@ -10,8 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PutProductRequest {
-    private ProductCategory productCategory;
-    private User productOwner;
+    private ProductCategory productCategoryId;
     private String productName;
     private String description;
     private Long price;

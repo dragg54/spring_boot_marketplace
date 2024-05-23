@@ -10,8 +10,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostProductRequest {
-    private ProductCategory productCategory;
-    private User productOwner;
+    private Long productCategoryId;
+    private Long productOwnerId;
     private String productName;
     private String description;
     private Long price;
