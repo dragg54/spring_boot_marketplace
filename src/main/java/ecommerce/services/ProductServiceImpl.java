@@ -3,8 +3,10 @@ package ecommerce.services;
 import ecommerce.dtos.mappers.ProductMapper;
 import ecommerce.dtos.requests.PostProductRequest;
 import ecommerce.dtos.requests.PutProductRequest;
+import ecommerce.dtos.responses.ProductResponse;
 import ecommerce.entities.Product;
 import ecommerce.entities.ProductCategory;
+import ecommerce.entities.ProductImage;
 import ecommerce.entities.User;
 import ecommerce.exceptions.NotFoundException;
 import ecommerce.repositories.ProductCategoryRepository;
@@ -14,6 +16,10 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,15 +32,22 @@ public class ProductServiceImpl implements ProductService {
     private final Logger LOGGER = LoggerFactory.getLogger(ProductCategoryServiceImpl.class);
 
     @Override
-    public void createProduct(PostProductRequest request) throws NotFoundException {
-        LOGGER.info("new product added");
+    public void createProduct(PostProductRequest request) throws NotFoundException, IOException {
         ProductCategory productCategory = productCategoryRepository.findById(request.getProductCategoryId())
                 .orElseThrow(()->new NotFoundException(String.format("Product category with id %d not found",
                         request.getProductCategoryId())));
         User productOwner = userRepository.findById(request.getProductOwnerId())
                 .orElseThrow(()->new NotFoundException(String.format("Product category with id %d not found",
-                        request.getProductCategoryId())));;
+                        request.getProductCategoryId())));
         Product newProduct = productMapper.postProductRequestToProduct(request, productCategory, productOwner);
+        List<ProductImage> productImages = new ArrayList<ProductImage>();
+        for (MultipartFile file : request.getProductImages()) {
+            ProductImage image = new ProductImage();
+            image.setProductImage(file.getBytes());
+            productImages.add(image);
+        }
+         newProduct.setProductImages(productImages);
+        LOGGER.info("new product added");
         productRepository.save(newProduct);
     }
     @Override
@@ -43,8 +56,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts() {
-        return null;
+    public List<ProductResponse> getProducts() {
+        List<Product> products= productRepository.findAll();
+        List<ProductResponse> productResources= productMapper.productsToProductResources(products);
+        return productResources;
     }
 
     @Override

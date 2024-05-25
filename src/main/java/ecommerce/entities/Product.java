@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -30,7 +32,9 @@ public class Product {
 
     @Column(nullable = false)
     private Integer quantity;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -40,4 +44,9 @@ public class Product {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private User productOwner;
+
+    @ElementCollection
+    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_image_id"))
+    private List<ProductImage> productImages;
+
 }
