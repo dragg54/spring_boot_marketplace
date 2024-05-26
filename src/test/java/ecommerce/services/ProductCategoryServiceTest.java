@@ -10,6 +10,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import ecommerce.entities.ProductCategory;
 import ecommerce.exceptions.NotFoundException;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -49,7 +51,7 @@ class ProductCategoryServiceTest {
         productCategory = ProductCategory.builder()
                                          .productCategoryId(1L)
                                          .categoryName("Electronics")
-                                         .createdAt(new Date())
+                                         .createdAt(LocalDateTime.now())
                                          .updatedAt(null)
                                          .build();
 

@@ -1,4 +1,4 @@
-package ecommerce.dtos.queries;
+package ecommerce.dtos.requests;
 
 public class ProductCategroryRequest {
 }

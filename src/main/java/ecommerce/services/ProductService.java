@@ -1,5 +1,6 @@
 package ecommerce.services;
 
+import ecommerce.dtos.queries.ProductSearchQuery;
 import ecommerce.dtos.requests.PostProductRequest;
 import ecommerce.dtos.requests.PutProductRequest;
 import ecommerce.dtos.responses.ProductResponse;
@@ -12,8 +13,8 @@ import java.util.List;
 
 public interface ProductService {
     void createProduct(PostProductRequest request) throws NotFoundException, IOException;
-    Product getProduct(Long id);
-    List<ProductResponse> getProducts();
+    ProductResponse getProduct(Long id) throws NotFoundException;
+    List<ProductResponse> getProducts(ProductSearchQuery searchQuery);
     void updateProduct(PutProductRequest request, Long id) throws NotFoundException;
     void deleteProduct(Long id) throws NotFoundException;
 }

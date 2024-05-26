@@ -12,7 +12,6 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class ProductImage {
-    private Long productId;
     @Lob
     @Column(name = "product_image", columnDefinition = "LONGBLOB")
     private byte[] productImage;

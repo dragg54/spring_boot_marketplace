@@ -1,6 +1,7 @@
 package ecommerce.aop;
 
 import ecommerce.exceptions.DuplicateException;
+import ecommerce.exceptions.InvalidRequestException;
 import ecommerce.exceptions.NotFoundException;
 import ecommerce.dtos.responses.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -33,5 +34,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorMessage = new ErrorResponse( exception.getMessage(), HttpStatus.CONFLICT) {
         };
         return ResponseEntity.status(HttpStatus.CONFLICT).body((errorMessage));
+    }
+
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ErrorResponse> invalidRequestException(InvalidRequestException exception, WebRequest request){
+        ErrorResponse errorMessage = new ErrorResponse( exception.getMessage(), HttpStatus.BAD_REQUEST) {
+        };
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body((errorMessage));
     }
 }

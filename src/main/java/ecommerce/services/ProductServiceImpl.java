@@ -1,20 +1,22 @@
 package ecommerce.services;
 
+import ecommerce.data.enums.BidStatus;
 import ecommerce.dtos.mappers.ProductMapper;
+import ecommerce.dtos.queries.ProductSearchQuery;
 import ecommerce.dtos.requests.PostProductRequest;
 import ecommerce.dtos.requests.PutProductRequest;
 import ecommerce.dtos.responses.ProductResponse;
-import ecommerce.entities.Product;
-import ecommerce.entities.ProductCategory;
-import ecommerce.entities.ProductImage;
-import ecommerce.entities.User;
+import ecommerce.entities.*;
 import ecommerce.exceptions.NotFoundException;
+import ecommerce.repositories.BidRepository;
 import ecommerce.repositories.ProductCategoryRepository;
 import ecommerce.repositories.ProductRepository;
 import ecommerce.repositories.UserRepository;
+import ecommerce.specifications.ProductSpecification;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final ProductCategoryRepository productCategoryRepository;
     private final UserRepository userRepository;
+    private final BidRepository bidRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(ProductCategoryServiceImpl.class);
 
     @Override
@@ -46,18 +49,30 @@ public class ProductServiceImpl implements ProductService {
             image.setProductImage(file.getBytes());
             productImages.add(image);
         }
+        Bid newBid = Bid
+                .builder()
+                .product(newProduct)
+                .bidStatus(BidStatus.DRAFTED)
+                .createdAt(newProduct.getCreatedAt())
+                .build();
+         bidRepository.save(newBid);
          newProduct.setProductImages(productImages);
         LOGGER.info("new product added");
         productRepository.save(newProduct);
     }
     @Override
-    public Product getProduct(Long id) {
-        return null;
+    public ProductResponse getProduct(Long id) throws NotFoundException {
+        Product product = productRepository.findById(id)
+                .orElseThrow(()->new NotFoundException(String.format("Product with id %d not found",id
+                )));
+        ProductResponse response = productMapper.productToProductResponse(product);
+        return response;
     }
 
     @Override
-    public List<ProductResponse> getProducts() {
-        List<Product> products= productRepository.findAll();
+    public List<ProductResponse> getProducts(ProductSearchQuery searchQuery) {
+        Specification<Product> productSpecification = ProductSpecification.filterBySearchQuery(searchQuery);
+        List<Product> products= productRepository.findAll(productSpecification);
         List<ProductResponse> productResources= productMapper.productsToProductResources(products);
         return productResources;
     }

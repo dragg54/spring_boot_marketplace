@@ -16,6 +16,7 @@ import java.util.Optional;
 public class ProductCategoryServiceImpl implements ProductCategoryService{
     private final ProductCategoryRepository productCategoryRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(ProductCategoryServiceImpl.class);
+
     public Optional<ProductCategory> getProductCategory(Long id) throws NotFoundException {
            Optional<ProductCategory> productCategory = productCategoryRepository.findById(id);
            if(!productCategory.isPresent()){

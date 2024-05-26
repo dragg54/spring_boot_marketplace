@@ -1,5 +1,6 @@
 package ecommerce.controllers;
 
+import ecommerce.dtos.queries.ProductSearchQuery;
 import ecommerce.dtos.requests.PostProductRequest;
 import ecommerce.dtos.responses.ProductResponse;
 import ecommerce.entities.Product;
@@ -31,14 +32,14 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getProducts(){
-        List<ProductResponse> products = productService.getProducts();
+    public ResponseEntity<List<ProductResponse>> getProducts(@ModelAttribute ProductSearchQuery searchQuery){
+        List<ProductResponse> products = productService.getProducts(searchQuery);
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable Long id){
-        Product product = productService.getProduct(id);
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) throws NotFoundException {
+        ProductResponse product = productService.getProduct(id);
         return ResponseEntity.ok(product);
     }
 
