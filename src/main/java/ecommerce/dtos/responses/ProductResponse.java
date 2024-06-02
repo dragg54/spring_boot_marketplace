@@ -15,7 +15,7 @@ import java.util.List;
 public class ProductResponse {
     private Long productId;
     private ProductCategory productCategory;
-    private User productOwner;
+    private UserResponse productOwner;
     private String productName;
     private String description;
     private List<ProductImage> productImages;

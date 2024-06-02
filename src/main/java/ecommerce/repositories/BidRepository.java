@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BidRepository extends JpaRepository<Bid, Long> {
-    @Query("SELECT & FROM bid b WHERE b.productOwnerId=:productOwnerId AND bidStatus=?2")
-    public List<Bid> findAllBids(@Param("productOwnerId")Long productOwnerId, @Param("bidStatus") String bidStatus);
+    @Query("SELECT b FROM Bid b WHERE b.product.id=:productId AND bidStatus=:bidStatus ")
+     List<Bid> findAllBids(@Param("productId")Long productId, @Param("bidStatus") String bidStatus);
 }

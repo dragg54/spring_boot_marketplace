@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Data
@@ -23,6 +22,7 @@ public class Bid {
     private BidStatus bidStatus;
 
     private Integer bidPrice;
+    private Integer quantity;
 
     private LocalDateTime createdAt;
 

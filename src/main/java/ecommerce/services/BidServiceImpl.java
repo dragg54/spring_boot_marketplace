@@ -3,9 +3,11 @@ package ecommerce.services;
 import ecommerce.dtos.queries.BidSearchQuery;
 import ecommerce.dtos.requests.PutBidRequest;
 import ecommerce.entities.Bid;
+import ecommerce.entities.Product;
 import ecommerce.exceptions.InvalidRequestException;
 import ecommerce.exceptions.NotFoundException;
 import ecommerce.repositories.BidRepository;
+import ecommerce.repositories.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BidServiceImpl implements  BidService{
     private final BidRepository bidRepository;
+    private final ProductRepository productRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(BidServiceImpl.class);
 
     public void updateBidStatus(PutBidRequest request) throws NotFoundException, InvalidRequestException {
@@ -29,6 +32,15 @@ public class BidServiceImpl implements  BidService{
             LOGGER.error(errMsg);
             throw new InvalidRequestException(errMsg);
         }
+        LOGGER.error(String.format("Product with id %d not found", request.getProductId()));
+        Product existingProduct = productRepository.findById(request.getProductId()).orElseThrow(
+                ()-> new NotFoundException(String.format("Product with id %d not found", request.getProductId()))
+        );
+        if(existingProduct.getQuantity() < request.getQuantity()){
+            String errMsg = String.format("Bidding quantity cannot be greater than product quantity");
+            LOGGER.error(errMsg);
+            throw new InvalidRequestException(errMsg);
+        }
         bid.setBidPrice(request.getBiddingPrice());
         bid.setBidStatus(request.getBidStatus());
         bid.setUpdatedAt(LocalDateTime.now());
@@ -37,8 +49,13 @@ public class BidServiceImpl implements  BidService{
         bidRepository.save(bid);
     }
 
+    @Override
+    public List<Bid> bids(BidSearchQuery searchQuery) {
+        return null;
+    }
+
     public List<Bid> getBids(BidSearchQuery searchQuery){
-        List<Bid> bids = bidRepository.findAllBids(searchQuery.getProductOwnerId(), searchQuery.getBidStatus());
+        List<Bid> bids = bidRepository.findAllBids(searchQuery.getProductId(), searchQuery.getBidStatus());
         return bids;
     }
 }

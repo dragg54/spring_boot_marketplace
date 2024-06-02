@@ -32,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductCategoryRepository productCategoryRepository;
     private final UserRepository userRepository;
     private final BidRepository bidRepository;
+    private final UserDtlServiceImpl userDtlService;
     private final Logger LOGGER = LoggerFactory.getLogger(ProductCategoryServiceImpl.class);
 
     @Override
@@ -39,7 +40,8 @@ public class ProductServiceImpl implements ProductService {
         ProductCategory productCategory = productCategoryRepository.findById(request.getProductCategoryId())
                 .orElseThrow(()->new NotFoundException(String.format("Product category with id %d not found",
                         request.getProductCategoryId())));
-        User productOwner = userRepository.findById(request.getProductOwnerId())
+        System.out.println(userDtlService.getCurrentUserId());
+        User productOwner = userRepository.findById(userDtlService.getCurrentUserId())
                 .orElseThrow(()->new NotFoundException(String.format("Product category with id %d not found",
                         request.getProductCategoryId())));
         Product newProduct = productMapper.postProductRequestToProduct(request, productCategory, productOwner);

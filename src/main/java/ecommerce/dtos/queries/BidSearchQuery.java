@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BidSearchQuery {
-    private Long productOwnerId;
+    private Long productId;
     private String bidStatus;
 }

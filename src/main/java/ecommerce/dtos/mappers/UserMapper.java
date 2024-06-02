@@ -11,7 +11,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {UserServiceImpl.class})
 public interface UserMapper {
-    @Mapping(target = "userId", ignore = true)
     public User postUserRequestToUser(PostUserRequest request);
 
     public UserResponse userToUserResponse(User user);

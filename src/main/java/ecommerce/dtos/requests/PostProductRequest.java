@@ -15,7 +15,6 @@ import java.util.List;
 @Setter
 public class PostProductRequest {
     private Long productCategoryId;
-    private Long productOwnerId;
     private String productName;
     private List<MultipartFile> productImages;
     private String description;
