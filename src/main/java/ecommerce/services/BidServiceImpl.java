@@ -4,6 +4,7 @@ import ecommerce.dtos.queries.BidSearchQuery;
 import ecommerce.dtos.requests.PutBidRequest;
 import ecommerce.entities.Bid;
 import ecommerce.entities.Product;
+import ecommerce.entities.User;
 import ecommerce.exceptions.InvalidRequestException;
 import ecommerce.exceptions.NotFoundException;
 import ecommerce.repositories.BidRepository;
@@ -21,12 +22,13 @@ import java.util.List;
 public class BidServiceImpl implements  BidService{
     private final BidRepository bidRepository;
     private final ProductRepository productRepository;
+    private final UserDtlServiceImpl userDtlService;
     private final Logger LOGGER = LoggerFactory.getLogger(BidServiceImpl.class);
 
-    public void updateBidStatus(PutBidRequest request) throws NotFoundException, InvalidRequestException {
-        Bid bid = bidRepository.findById(request.getBidId())
+    public void updateBidStatus(PutBidRequest request, Long id) throws NotFoundException, InvalidRequestException {
+        Bid bid = bidRepository.findById(id)
                 .orElseThrow(()-> new NotFoundException(String.format("String with id %d " +
-                        "cannot be found", request.getBidId())));
+                        "cannot be found", id)));
         if(request.getBidStatus().getValue() < bid.getBidStatus().getValue()){
             String errMsg = "Status cannot be updated to value less than existing status";
             LOGGER.error(errMsg);
@@ -41,10 +43,10 @@ public class BidServiceImpl implements  BidService{
             LOGGER.error(errMsg);
             throw new InvalidRequestException(errMsg);
         }
+        request.setProductBidderId(userDtlService.getCurrentUserId());
         bid.setBidPrice(request.getBiddingPrice());
         bid.setBidStatus(request.getBidStatus());
         bid.setUpdatedAt(LocalDateTime.now());
-
         LOGGER.info("bid updated successfully");
         bidRepository.save(bid);
     }

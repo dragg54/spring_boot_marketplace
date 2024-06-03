@@ -11,6 +11,6 @@ import java.util.List;
 
 @Service
 public interface BidService {
-    public void updateBidStatus(PutBidRequest request) throws NotFoundException, InvalidRequestException;
+    public void updateBidStatus(PutBidRequest request, Long id) throws NotFoundException, InvalidRequestException;
     public List<Bid> bids(BidSearchQuery searchQuery);
 }

@@ -40,7 +40,6 @@ public class ProductServiceImpl implements ProductService {
         ProductCategory productCategory = productCategoryRepository.findById(request.getProductCategoryId())
                 .orElseThrow(()->new NotFoundException(String.format("Product category with id %d not found",
                         request.getProductCategoryId())));
-        System.out.println(userDtlService.getCurrentUserId());
         User productOwner = userRepository.findById(userDtlService.getCurrentUserId())
                 .orElseThrow(()->new NotFoundException(String.format("Product category with id %d not found",
                         request.getProductCategoryId())));

@@ -22,6 +22,7 @@ public class Bid {
     private BidStatus bidStatus;
 
     private Integer bidPrice;
+
     private Integer quantity;
 
     private LocalDateTime createdAt;

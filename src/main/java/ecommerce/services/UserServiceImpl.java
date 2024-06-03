@@ -60,8 +60,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public AuthorizationResponse loginUser(UserLoginRequest user) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
-        User userDtl = userRepository.findByUsername(user.getUserName());
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        User userDtl = userRepository.findByUsername(user.getUsername());
         String token = authService.generateToken(userDtl);
         return AuthorizationResponse.builder().token(token).build();
     }

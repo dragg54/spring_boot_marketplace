@@ -21,7 +21,7 @@ public class BidController {
     @PatchMapping("{id}")
     public ResponseEntity updateBidStatus(@PathVariable Long id, @RequestBody PutBidRequest request)
             throws NotFoundException, InvalidRequestException {
-        bidService.updateBidStatus(request);
+        bidService.updateBidStatus(request, id);
         return ResponseEntity.ok("Bid status updated");
     }
 

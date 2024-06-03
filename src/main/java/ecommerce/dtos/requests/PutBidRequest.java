@@ -11,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PutBidRequest {
-    private Long bidId;
     private Long productId;
     private Long productBidderId;
     private BidStatus bidStatus;
