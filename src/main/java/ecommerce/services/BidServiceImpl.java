@@ -1,5 +1,6 @@
 package ecommerce.services;
 
+import ecommerce.dtos.mappers.BidMapper;
 import ecommerce.dtos.queries.BidSearchQuery;
 import ecommerce.dtos.requests.PutBidRequest;
 import ecommerce.entities.Bid;
@@ -9,6 +10,9 @@ import ecommerce.exceptions.InvalidRequestException;
 import ecommerce.exceptions.NotFoundException;
 import ecommerce.repositories.BidRepository;
 import ecommerce.repositories.ProductRepository;
+import ecommerce.repositories.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +27,13 @@ public class BidServiceImpl implements  BidService{
     private final BidRepository bidRepository;
     private final ProductRepository productRepository;
     private final UserDtlServiceImpl userDtlService;
+    private final BidMapper bidMapper;
+    public final EntityManager entityManager;
+    private final UserRepository userRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(BidServiceImpl.class);
 
+
+    @Transactional
     public void updateBidStatus(PutBidRequest request, Long id) throws NotFoundException, InvalidRequestException {
         Bid bid = bidRepository.findById(id)
                 .orElseThrow(()-> new NotFoundException(String.format("String with id %d " +
@@ -34,7 +43,6 @@ public class BidServiceImpl implements  BidService{
             LOGGER.error(errMsg);
             throw new InvalidRequestException(errMsg);
         }
-        LOGGER.error(String.format("Product with id %d not found", request.getProductId()));
         Product existingProduct = productRepository.findById(request.getProductId()).orElseThrow(
                 ()-> new NotFoundException(String.format("Product with id %d not found", request.getProductId()))
         );
@@ -43,12 +51,11 @@ public class BidServiceImpl implements  BidService{
             LOGGER.error(errMsg);
             throw new InvalidRequestException(errMsg);
         }
-        request.setProductBidderId(userDtlService.getCurrentUserId());
-        bid.setBidPrice(request.getBiddingPrice());
-        bid.setBidStatus(request.getBidStatus());
+        User currentUser = entityManager.merge(userDtlService.getCurrentUser());
+        Bid updatedBid = bidMapper.putBidRequestToBid(bid, request, currentUser);
         bid.setUpdatedAt(LocalDateTime.now());
         LOGGER.info("bid updated successfully");
-        bidRepository.save(bid);
+        bidRepository.save(updatedBid);
     }
 
     @Override

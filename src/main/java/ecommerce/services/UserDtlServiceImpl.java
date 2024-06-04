@@ -30,4 +30,8 @@ public class UserDtlServiceImpl implements UserDetailsService {
         }
         return null;
     }
+
+    public User getCurrentUser(){
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 }

@@ -15,5 +15,5 @@ public class PutBidRequest {
     private Long productBidderId;
     private BidStatus bidStatus;
     private Integer quantity;
-    private Integer biddingPrice;
+    private Integer bidPrice;
 }
