@@ -1,6 +1,6 @@
 package ecommerce.services;
 
-import ecommerce.data.enums.BidStatus;
+import ecommerce.constants.BidStatus;
 import ecommerce.dtos.mappers.ProductMapper;
 import ecommerce.dtos.queries.ProductSearchQuery;
 import ecommerce.dtos.requests.PostProductRequest;

@@ -10,5 +10,6 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface BidMapper {
      @Mapping(source="bidder", target = "bidder")
+     @Mapping(target = "updatedAt", expression = "java(java.time.LocalDateTime.now())")
      Bid putBidRequestToBid(@MappingTarget Bid bid, PutBidRequest request, User bidder);
 }

@@ -1,13 +1,12 @@
 package ecommerce.dtos.requests;
 
-import ecommerce.data.enums.BidStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import ecommerce.constants.BidStatus;
 import lombok.*;
 
 @Data
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class PutBidRequest {

@@ -1,39 +1,37 @@
 package ecommerce.entities;
 
-import ecommerce.constants.BidStatus;
+import ecommerce.constants.SessionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class Bid {
+public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bidId;
+    private Long sessionId;
+
+    private String stripePriceId;
 
     @Enumerated(EnumType.STRING)
-    private BidStatus bidStatus;
-
-    private Integer bidPrice;
-
-    private Integer quantity;
+    private SessionStatus status;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(name = "bid_id")
+    private Bid bid;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bidder_id")
-    private User bidder;
+    @Column(name = "user_id")
+    private User user;
 }

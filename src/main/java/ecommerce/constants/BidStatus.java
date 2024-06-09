@@ -1,4 +1,4 @@
-package ecommerce.data.enums;
+package ecommerce.constants;
 
 public enum BidStatus {
     DRAFTED(1),

@@ -1,16 +1,17 @@
 package ecommerce.services;
 
+import ecommerce.constants.BidStatus;
 import ecommerce.dtos.mappers.BidMapper;
 import ecommerce.dtos.queries.BidSearchQuery;
 import ecommerce.dtos.requests.PutBidRequest;
 import ecommerce.entities.Bid;
+import ecommerce.entities.Price;
 import ecommerce.entities.Product;
 import ecommerce.entities.User;
 import ecommerce.exceptions.InvalidRequestException;
 import ecommerce.exceptions.NotFoundException;
 import ecommerce.repositories.BidRepository;
 import ecommerce.repositories.ProductRepository;
-import ecommerce.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -29,15 +30,15 @@ public class BidServiceImpl implements  BidService{
     private final UserDtlServiceImpl userDtlService;
     private final BidMapper bidMapper;
     public final EntityManager entityManager;
-    private final UserRepository userRepository;
+    private  final StripeServiceImpl priceService;
     private final Logger LOGGER = LoggerFactory.getLogger(BidServiceImpl.class);
 
 
     @Transactional
     public void updateBidStatus(PutBidRequest request, Long id) throws NotFoundException, InvalidRequestException {
         Bid bid = bidRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException(String.format("String with id %d " +
-                        "cannot be found", id)));
+                .orElseThrow(()-> new NotFoundException(String.format("Bid with id %d " +
+                        "not found", id)));
         if(request.getBidStatus().getValue() < bid.getBidStatus().getValue()){
             String errMsg = "Status cannot be updated to value less than existing status";
             LOGGER.error(errMsg);
@@ -50,6 +51,10 @@ public class BidServiceImpl implements  BidService{
             String errMsg = String.format("Bidding quantity cannot be greater than product quantity");
             LOGGER.error(errMsg);
             throw new InvalidRequestException(errMsg);
+        }
+        if(request.getBidStatus() == BidStatus.SUBMITTED){
+            Price price = Price.builder().bid(bid).build();
+            priceService.createStripePrice();
         }
         User currentUser = entityManager.merge(userDtlService.getCurrentUser());
         Bid updatedBid = bidMapper.putBidRequestToBid(bid, request, currentUser);

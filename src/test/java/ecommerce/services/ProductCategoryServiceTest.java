@@ -10,11 +10,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import ecommerce.entities.ProductCategory;
 import ecommerce.exceptions.NotFoundException;
-
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
