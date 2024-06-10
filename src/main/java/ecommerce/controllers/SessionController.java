@@ -16,13 +16,13 @@ public class SessionController {
     private final SessionServiceImp sessionServiceImp;
 
     @PostMapping
-    public ResponseEntity openSession(OpenSessionRequest request) throws NotFoundException {
+    public ResponseEntity openSession(@RequestBody  OpenSessionRequest request) throws NotFoundException {
         sessionServiceImp.openSession(request);
         return ResponseEntity.ok("Session opened");
     }
 
-    @PutMapping
-    public ResponseEntity checkoutSession(CheckoutSessionRequest request, @PathVariable Long id)
+    @PutMapping("{id}")
+    public ResponseEntity checkoutSession(@RequestBody  CheckoutSessionRequest request, @PathVariable Long id)
             throws StripeException, NotFoundException {
         sessionServiceImp.checkoutSession(request, id);
         return ResponseEntity.ok("Session updated to checked out");

@@ -21,8 +21,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class StripeServiceImpl implements StripeService {
     private final Logger LOGGER = LoggerFactory.getLogger(StripeServiceImpl.class);
-    private StripeProduct product;
-    public String createStripePrice() {
+    public String createStripePrice(StripeProduct product) {
         PriceCreateParams params = PriceCreateParams.builder()
                 .setUnitAmount(product.getPrice())
                 .setCurrency("usd")

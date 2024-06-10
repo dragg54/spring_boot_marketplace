@@ -38,8 +38,7 @@ public class SessionServiceImp implements SessionService{
         User user = userDtlService.getCurrentUser();
         Session session = sessionMapper.openSessionRequestToSession(request, user);
         StripeProduct stripeProduct = stripeMapper.bidToStripeProduct(existingBid);
-        stripeService.setProduct(stripeProduct);
-        String stripePriceId = stripeService.createStripePrice();
+        String stripePriceId = stripeService.createStripePrice(stripeProduct);
         session.setStripePriceId(stripePriceId);
         LOGGER.info("Session opened");
         sessionRepository.save(session);

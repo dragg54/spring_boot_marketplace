@@ -5,7 +5,6 @@ import ecommerce.dtos.mappers.BidMapper;
 import ecommerce.dtos.queries.BidSearchQuery;
 import ecommerce.dtos.requests.PutBidRequest;
 import ecommerce.entities.Bid;
-import ecommerce.entities.Price;
 import ecommerce.entities.Product;
 import ecommerce.entities.User;
 import ecommerce.exceptions.InvalidRequestException;
@@ -51,10 +50,6 @@ public class BidServiceImpl implements  BidService{
             String errMsg = String.format("Bidding quantity cannot be greater than product quantity");
             LOGGER.error(errMsg);
             throw new InvalidRequestException(errMsg);
-        }
-        if(request.getBidStatus() == BidStatus.SUBMITTED){
-            Price price = Price.builder().bid(bid).build();
-            priceService.createStripePrice();
         }
         User currentUser = entityManager.merge(userDtlService.getCurrentUser());
         Bid updatedBid = bidMapper.putBidRequestToBid(bid, request, currentUser);

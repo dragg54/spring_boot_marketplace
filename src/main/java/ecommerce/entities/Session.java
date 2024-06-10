@@ -28,10 +28,10 @@ public class Session {
     private LocalDateTime updatedAt;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @Column(name = "bid_id")
+    @JoinColumn(name = "bid_id")
     private Bid bid;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 }

@@ -3,16 +3,12 @@ package ecommerce.controllers;
 import ecommerce.dtos.queries.ProductSearchQuery;
 import ecommerce.dtos.requests.PostProductRequest;
 import ecommerce.dtos.responses.ProductResponse;
-import ecommerce.entities.Product;
-import ecommerce.entities.ProductCategory;
-import ecommerce.entities.User;
 import ecommerce.exceptions.NotFoundException;
 import ecommerce.services.ProductServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -23,7 +19,7 @@ public class ProductController {
     private final ProductServiceImpl productService;
 
     @PostMapping
-    public ResponseEntity createProduct(@ModelAttribute("request") PostProductRequest request,
+     public ResponseEntity createProduct(@ModelAttribute("request") PostProductRequest request,
                                         @RequestParam("productImages") List<MultipartFile> productImages)
             throws NotFoundException, IOException {
         request.setProductImages(productImages);
