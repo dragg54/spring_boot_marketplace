@@ -33,7 +33,8 @@ public class BidServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+
+//        MockitoAnnotations.initMocks(this);
     }
 
     @Test

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class ProductCategoryServiceImpl implements ProductCategoryService{
     private final ProductCategoryRepository productCategoryRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(ProductCategoryServiceImpl.class);

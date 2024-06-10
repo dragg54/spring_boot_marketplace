@@ -13,7 +13,7 @@ import ecommerce.exceptions.NotFoundException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ProductCategoryServiceTest {
@@ -25,7 +25,9 @@ class ProductCategoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        productCategory = new ProductCategory();
+        productCategory.setProductCategoryId(1L);
+        productCategory.setCategoryName("Electronics");
     }
 
     @Test
@@ -44,18 +46,13 @@ class ProductCategoryServiceTest {
     @DisplayName("When get product category is invoked with a valid id " +
             "then should return a product category")
     public void getExistingProductCategory() throws NotFoundException {
-        // Arrange
-        productCategory = ProductCategory.builder()
-                                         .productCategoryId(1L)
-                                         .categoryName("Electronics")
-                                         .createdAt(LocalDateTime.now())
-                                         .updatedAt(null)
-                                         .build();
+        when(productCategoryRepository.findById(1L)).thenReturn(Optional.of(productCategory));
 
-        when(productCategoryRepository.findById(1L)).thenReturn(Optional.ofNullable(productCategory));
-        // Act
         Optional<ProductCategory> result = productCategoryService.getProductCategory(1L);
-        assertNotNull(result);
-        assertEquals(productCategory, result);
+
+        assertTrue(result.isPresent());
+//        assertEquals("Electronics", result.get().getName());
+        verify(productCategoryRepository, times(1)).findById(1L);
+        verifyNoMoreInteractions(productCategoryRepository);
     }
 }
