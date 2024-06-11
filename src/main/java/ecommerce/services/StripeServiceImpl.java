@@ -1,5 +1,8 @@
 package ecommerce.services;
 
+import com.stripe.Stripe;
+import com.stripe.exception.ApiException;
+import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PriceCollection;
 import com.stripe.model.checkout.Session;
@@ -21,31 +24,25 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class StripeServiceImpl implements StripeService {
     private final Logger LOGGER = LoggerFactory.getLogger(StripeServiceImpl.class);
-    public String createStripePrice(StripeProduct product) {
+    public String createStripePrice(StripeProduct product) throws StripeException {
+        LOGGER.info(product.toString());
         PriceCreateParams params = PriceCreateParams.builder()
-                .setUnitAmount(product.getPrice())
+                .setUnitAmount(500L)
                 .setCurrency("usd")
                 .setProductData(
                         PriceCreateParams.ProductData.builder()
                                 .setId(String.valueOf(product.getProductId()))
+                                .setName("Bid payment")
                                 .build()
                 )
                 .build();
-
-        try {
             Price price = Price.create(params);
             LOGGER.info("Price ID: " + price.getId());
             return price.getId();
-        } catch (StripeException e) {
-            LOGGER.error("Stripe price creation failed");
-            e.printStackTrace();
-        }
-        return null;
     }
 
-    public Session createStripeCheckout(String priceId) throws StripeException {
+    public Session createStripeCheckout(String priceId) throws StripeException, AuthenticationException {
         String YOUR_DOMAIN = "http://localhost:4242";
-        StripeProduct stripeProduct;
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
@@ -53,6 +50,9 @@ public class StripeServiceImpl implements StripeService {
                         .setCancelUrl(YOUR_DOMAIN + "?canceled=true")
                         .addLineItem(
                                 SessionCreateParams.LineItem.builder()
+                                        .setQuantity(1L)
+                                        .setName("Bid for customer")
+                                        .setCurrency("usd")
                                         .setPrice(priceId)
                                         .build())
                         .build();

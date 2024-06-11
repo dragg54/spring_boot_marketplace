@@ -52,6 +52,12 @@ public class BidServiceImpl implements  BidService{
             throw new InvalidRequestException(errMsg);
         }
         User currentUser = entityManager.merge(userDtlService.getCurrentUser());
+        if(existingProduct.getProductOwner().getUserId() != currentUser.getUserId()
+            && request.getBidStatus() == BidStatus.ACCEPTED){
+            String errMsg = "bid can only be accepted by product owner";
+            LOGGER.error(errMsg);
+            throw new InvalidRequestException(errMsg);
+        }
         Bid updatedBid = bidMapper.putBidRequestToBid(bid, request, currentUser);
         bid.setUpdatedAt(LocalDateTime.now());
         LOGGER.info("bid updated successfully");

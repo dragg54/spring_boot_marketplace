@@ -1,6 +1,7 @@
 package ecommerce.entities;
 
 import ecommerce.constants.SessionStatus;
+import ecommerce.constants.ShippingDetail;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,9 @@ public class Session {
     private Long sessionId;
 
     private String stripePriceId;
+
+    @Embedded
+    private ShippingDetail shippingDetail;
 
     @Enumerated(EnumType.STRING)
     private SessionStatus status;

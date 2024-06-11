@@ -8,6 +8,6 @@ import com.stripe.model.checkout.Session;
 import ecommerce.constants.StripeProduct;
 
 public interface StripeService {
-    String createStripePrice(StripeProduct product);
+    String createStripePrice(StripeProduct product) throws StripeException;
     Session createStripeCheckout(String stripePriceId) throws StripeException;
 }
