@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {UserServiceImpl.class})
 public interface UserMapper {
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
-    public User postUserRequestToUser(PostUserRequest request);
+    User postUserRequestToUser(PostUserRequest request);
 
-    public UserResponse userToUserResponse(User user);
+    UserResponse userToUserResponse(User user);
 }

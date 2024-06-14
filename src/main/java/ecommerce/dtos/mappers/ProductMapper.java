@@ -20,10 +20,10 @@ public interface ProductMapper {
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "updatedAt", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "productImages", ignore = true)
-    public Product postProductRequestToProduct(PostProductRequest request, ProductCategory productCategory, User productOwner);
+    Product postProductRequestToProduct(PostProductRequest request, ProductCategory productCategory, User productOwner);
 
     @Mapping(target = "updatedAt", expression = "java(java.time.LocalDateTime.now())")
-    public Product updateProductRequestToProduct(PutProductRequest request);
+    Product updateProductRequestToProduct(PutProductRequest request);
 
     public ProductResponse productToProductResponse(Product product);
 

@@ -51,8 +51,6 @@ public class StripeServiceImpl implements StripeService {
                         .addLineItem(
                                 SessionCreateParams.LineItem.builder()
                                         .setQuantity(1L)
-                                        .setName("Bid for customer")
-                                        .setCurrency("usd")
                                         .setPrice(priceId)
                                         .build())
                         .build();

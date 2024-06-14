@@ -1,14 +1,15 @@
 package ecommerce.constants;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Embeddable;
+import lombok.*;
 
 @Data
 @Builder
 @Getter
 @Setter
+@Embeddable
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
     private String street;
     private String state;
